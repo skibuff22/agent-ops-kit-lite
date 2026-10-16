@@ -43,7 +43,7 @@ The paid **Agent Ops Kit** adds everything CLAUDE.md's mandatory-checks table re
 - PM + worker agent templates, agent registry schema
 - Guides: why D.O.E. works, adopting it in an existing codebase, running a fleet
 
-→ **https://skibuff22.github.io/calyx-ai-site/** — instant download, free updates, 14-day refund.
+→ **https://calyx-ai.net/** — instant download, free updates, 14-day refund.
 
 Built and used daily to run a small engineering company's CRM, invoicing, inventory
 and calibration platform with a fleet of agents. Every governance rule in the full
