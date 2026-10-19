@@ -1,0 +1,10 @@
+{
+  "name": "agent-ops-kit-lite",
+  "version": "1.0.0",
+  "description": "D.O.E. (Directive / Orchestration / Execution) for Claude Code: scaffold CLAUDE.md, directives and a secrets linter into any repo, then grow it with the self-annealing loop.",
+  "author": { "name": "Calyx AI (Quality Tester Solutions LLC)", "url": "https://calyx-ai.net/" },
+  "homepage": "https://github.com/skibuff22/agent-ops-kit-lite",
+  "repository": "https://github.com/skibuff22/agent-ops-kit-lite",
+  "license": "MIT",
+  "keywords": ["claude-code", "agents", "directives", "sop", "self-annealing", "doe"]
+}

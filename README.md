@@ -22,7 +22,22 @@ failure becomes a test, a rule, and a lint.
 python executions/lint_secrets.py          # exit 1 on any finding
 ```
 
-## Quick start
+## Install as a Claude Code plugin
+
+```
+/plugin marketplace add skibuff22/agent-ops-kit-lite
+/plugin install agent-ops-kit-lite@calyx-ai
+```
+
+(Claude Code 2.1.275+: `/plugin install agent-ops-kit-lite --marketplace skibuff22/agent-ops-kit-lite`)
+
+Then in any repo:
+
+- `/agent-ops-kit-lite:aok-init` - scaffolds `CLAUDE.md`, `directives/` and the secrets linter (never overwrites existing files)
+- `/agent-ops-kit-lite:aok-directive deploy the API` - writes a directive for a job from what's actually in the repo
+- `/agent-ops-kit-lite:aok-upgrade` - what the paid kit adds
+
+## Quick start (manual copy)
 
 1. Copy `CLAUDE.md` and `directives/` into your repo root.
 2. Write your first directive from `directives/00_template.md`, named after the job
