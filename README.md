@@ -30,7 +30,7 @@ python executions/lint_secrets.py          # exit 1 on any finding
 3. Tell the agent: *"Read CLAUDE.md, then <job>."* Watch what it appends to the
    directive's *Edge cases & learnings* — that section is the return on investment.
 
-## The full kit ($29)
+## The full kit ($19 launch price through 2026-11-02, then $29)
 
 The paid **Agent Ops Kit** adds everything CLAUDE.md's mandatory-checks table refers to:
 
