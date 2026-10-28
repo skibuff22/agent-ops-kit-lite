@@ -1,0 +1,10 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.skibuff22/publish-gate",
+  "description": "Check a draft's numbers against your facts.md and its links before you publish.",
+  "repository": { "url": "https://github.com/skibuff22/agent-ops-kit-lite", "source": "github", "subfolder": "mcp/publish-gate" },
+  "version": "0.1.0",
+  "packages": [
+    { "registryType": "npm", "identifier": "publish-gate-mcp", "version": "0.1.0", "transport": { "type": "stdio" } }
+  ]
+}

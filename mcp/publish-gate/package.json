@@ -1,0 +1,17 @@
+{
+  "name": "publish-gate-mcp",
+  "version": "0.1.0",
+  "description": "MCP server: check a draft's numbers against your facts.md and its links before you publish (Publish Gate lite, zero dependencies).",
+  "mcpName": "io.github.skibuff22/publish-gate",
+  "type": "module",
+  "bin": { "publish-gate-mcp": "server.js" },
+  "files": ["server.js", "README.md"],
+  "engines": { "node": ">=18" },
+  "scripts": { "test": "node --test test/*.test.js" },
+  "keywords": ["mcp", "mcp-server", "fact-check", "claude-code", "publishing", "llm"],
+  "license": "MIT",
+  "author": "Calyx AI (Quality Tester Solutions LLC) <tdoane@calyx-ai.net>",
+  "homepage": "https://github.com/skibuff22/agent-ops-kit-lite/tree/master/mcp/publish-gate",
+  "repository": { "type": "git", "url": "git+https://github.com/skibuff22/agent-ops-kit-lite.git", "directory": "mcp/publish-gate" },
+  "funding": { "type": "individual", "url": "https://calyx-ai.net/?utm_source=npm&utm_medium=funding#publish-gate" }
+}
