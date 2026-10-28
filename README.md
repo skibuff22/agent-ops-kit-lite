@@ -35,6 +35,7 @@ Then in any repo:
 
 - `/agent-ops-kit-lite:aok-init` - scaffolds `CLAUDE.md`, `directives/` and the secrets linter (never overwrites existing files)
 - `/agent-ops-kit-lite:aok-directive deploy the API` - writes a directive for a job from what's actually in the repo
+- `/agent-ops-kit-lite:verify-claims post.md` - checks a draft claim by claim against your `facts.md` before it goes public (PASS/FAIL table; Publish Gate lite)
 - `/agent-ops-kit-lite:aok-upgrade` - what the paid kit adds
 
 ## Quick start (manual copy)
