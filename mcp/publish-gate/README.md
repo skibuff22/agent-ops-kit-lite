@@ -9,6 +9,12 @@ Zero dependencies, Node 18+.
 | `check_links` | a URL errors or returns HTTP 400+, or a checkout link has no `utm_source` |
 
 ## Use with Claude Code
+From a clone of this repo (works today):
+```
+git clone https://github.com/skibuff22/agent-ops-kit-lite
+claude mcp add publish-gate -- node "$PWD/agent-ops-kit-lite/mcp/publish-gate/server.js"
+```
+From npm, once the package is published:
 ```
 claude mcp add publish-gate -- npx -y publish-gate-mcp
 ```

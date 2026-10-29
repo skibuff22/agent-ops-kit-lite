@@ -38,6 +38,20 @@ Then in any repo:
 - `/agent-ops-kit-lite:verify-claims post.md` - checks a draft claim by claim against your `facts.md` before it goes public (PASS/FAIL table; Publish Gate lite)
 - `/agent-ops-kit-lite:aok-upgrade` - what the paid kit adds
 
+## MCP server: publish-gate (free)
+
+`mcp/publish-gate/` is a zero-dependency MCP server (Node 18+) with two checks for a draft
+before it goes public: `check_numbers` (every number must be in your `facts.md` or carry a
+`[src: URL]`) and `check_links` (dead links, checkout links without `utm_source`).
+
+```
+git clone https://github.com/skibuff22/agent-ops-kit-lite
+claude mcp add publish-gate -- node "$PWD/agent-ops-kit-lite/mcp/publish-gate/server.js"
+```
+
+Any MCP client works the same way (command `node`, argument the path to `server.js`).
+Details: [mcp/publish-gate/README.md](mcp/publish-gate/README.md).
+
 ## Quick start (manual copy)
 
 1. Copy `CLAUDE.md` and `directives/` into your repo root.
