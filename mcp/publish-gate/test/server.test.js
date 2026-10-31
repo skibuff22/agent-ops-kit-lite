@@ -40,3 +40,22 @@ test("stdio: initialize, tools/list, tools/call", async () => {
   assert.deepEqual(res[1].result.tools.map((t) => t.name), ["check_numbers", "check_links"]);
   assert.match(res[2].result.content[0].text, /^FAIL \(1\)/);
 });
+
+test("stdio: unknown tool and missing draft are protocol errors; unreadable file is a tool error", async () => {
+  const p = spawn(process.execPath, [new URL("../server.js", import.meta.url).pathname]);
+  const out = [];
+  p.stdout.on("data", (d) => out.push(...d.toString().trim().split("\n")));
+  const send = (m) => p.stdin.write(JSON.stringify({ jsonrpc: "2.0", ...m }) + "\n");
+  send({ id: 1, method: "tools/call", params: { name: "no_such_tool", arguments: { draft_text: "x" } } });
+  send({ id: 2, method: "tools/call", params: { name: "check_numbers", arguments: { facts_text: FACTS } } });
+  send({ id: 3, method: "tools/call", params: { name: "check_numbers", arguments: { draft_path: "/nonexistent/draft.md", facts_text: FACTS } } });
+  send({ id: 4, method: "nope" });
+  await new Promise((r) => setTimeout(r, 500));
+  p.kill();
+  const res = Object.fromEntries(out.map((l) => JSON.parse(l)).map((m) => [m.id, m]));
+  assert.equal(res[1].error.code, -32602);
+  assert.equal(res[2].error.code, -32602);
+  assert.equal(res[3].result.isError, true);
+  assert.match(res[3].result.content[0].text, /^error: /);
+  assert.equal(res[4].error.code, -32601);
+});

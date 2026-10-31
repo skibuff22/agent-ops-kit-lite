@@ -64,16 +64,21 @@ const TOOLS = [
   },
 ];
 
+// MCP error split: unknown tool / invalid arguments = JSON-RPC error -32602 (protocol);
+// a failure while the tool runs (e.g. unreadable file) = result with isError: true.
+const invalidParams = (message) => Object.assign(new Error(message), { code: -32602 });
+
 async function callTool(name, args = {}) {
+  if (!TOOLS.some((t) => t.name === name)) throw invalidParams(`unknown tool: ${name}`);
+  if (args.draft_text == null && args.draft_path == null) throw invalidParams("give draft_text or draft_path");
   const draft = read(args, "draft_text", "draft_path");
-  if (draft == null) throw new Error("give draft_text or draft_path");
   let fails;
   if (name === "check_numbers") {
     const facts = read(args, "facts_text", "facts_path") ?? readFileSync("facts.md", "utf8");
     fails = checkNumbers(draft, facts);
-  } else if (name === "check_links") {
+  } else {
     fails = await checkLinks(draft);
-  } else throw new Error(`unknown tool ${name}`);
+  }
   const text = fails.length ? `FAIL (${fails.length})\n- ${fails.join("\n- ")}` : "PASS";
   return { content: [{ type: "text", text }], isError: false };
 }
@@ -86,8 +91,11 @@ async function handle(msg) {
         serverInfo: { name: "publish-gate", version: VERSION } };
     case "tools/list": return { tools: TOOLS };
     case "tools/call":
-      try { return await callTool(params.name, params.arguments); }
-      catch (e) { return { content: [{ type: "text", text: `error: ${e.message}` }], isError: true }; }
+      try { return await callTool(params?.name, params?.arguments); }
+      catch (e) {
+        if (e.code === -32602) throw e;
+        return { content: [{ type: "text", text: `error: ${e.message}` }], isError: true };
+      }
     case "ping": return {};
     default:
       if (id === undefined) return undefined; // notification
