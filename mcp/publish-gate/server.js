@@ -64,13 +64,18 @@ const TOOLS = [
   },
 ];
 
-// MCP error split: unknown tool / invalid arguments = JSON-RPC error -32602 (protocol);
-// a failure while the tool runs (e.g. unreadable file) = result with isError: true.
+// MCP error split (spec 2025-11-25, SEP-1303): unknown tool = JSON-RPC error -32602 (protocol);
+// invalid arguments and failures while the tool runs (e.g. unreadable file) = result with
+// isError: true, so the model sees the message and can retry.
 const invalidParams = (message) => Object.assign(new Error(message), { code: -32602 });
+
+// Revisions whose tools/initialize rules this server was checked against, newest first.
+// A client asking for another revision gets the newest of these (lifecycle: version negotiation).
+const PROTOCOL_VERSIONS = ["2025-11-25", "2025-06-18"];
 
 async function callTool(name, args = {}) {
   if (!TOOLS.some((t) => t.name === name)) throw invalidParams(`unknown tool: ${name}`);
-  if (args.draft_text == null && args.draft_path == null) throw invalidParams("give draft_text or draft_path");
+  if (args.draft_text == null && args.draft_path == null) throw new Error("give draft_text or draft_path");
   const draft = read(args, "draft_text", "draft_path");
   let fails;
   if (name === "check_numbers") {
@@ -87,7 +92,8 @@ async function handle(msg) {
   const { id, method, params } = msg;
   switch (method) {
     case "initialize":
-      return { protocolVersion: params?.protocolVersion ?? "2025-06-18", capabilities: { tools: {} },
+      return { protocolVersion: PROTOCOL_VERSIONS.includes(params?.protocolVersion) ? params.protocolVersion : PROTOCOL_VERSIONS[0],
+        capabilities: { tools: {} },
         serverInfo: { name: "publish-gate", version: VERSION } };
     case "tools/list": return { tools: TOOLS };
     case "tools/call":

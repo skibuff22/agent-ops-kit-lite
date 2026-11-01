@@ -41,7 +41,7 @@ test("stdio: initialize, tools/list, tools/call", async () => {
   assert.match(res[2].result.content[0].text, /^FAIL \(1\)/);
 });
 
-test("stdio: unknown tool and missing draft are protocol errors; unreadable file is a tool error", async () => {
+test("stdio: unknown tool is a protocol error; missing draft and unreadable file are tool errors", async () => {
   const p = spawn(process.execPath, [new URL("../server.js", import.meta.url).pathname]);
   const out = [];
   p.stdout.on("data", (d) => out.push(...d.toString().trim().split("\n")));
@@ -54,8 +54,24 @@ test("stdio: unknown tool and missing draft are protocol errors; unreadable file
   p.kill();
   const res = Object.fromEntries(out.map((l) => JSON.parse(l)).map((m) => [m.id, m]));
   assert.equal(res[1].error.code, -32602);
-  assert.equal(res[2].error.code, -32602);
+  assert.equal(res[2].result.isError, true);
+  assert.match(res[2].result.content[0].text, /give draft_text or draft_path/);
   assert.equal(res[3].result.isError, true);
   assert.match(res[3].result.content[0].text, /^error: /);
   assert.equal(res[4].error.code, -32601);
+});
+
+test("stdio: initialize answers a known revision as asked and an unknown one with the newest checked", async () => {
+  const p = spawn(process.execPath, [new URL("../server.js", import.meta.url).pathname]);
+  const out = [];
+  p.stdout.on("data", (d) => out.push(...d.toString().trim().split("\n")));
+  const send = (m) => p.stdin.write(JSON.stringify({ jsonrpc: "2.0", ...m }) + "\n");
+  send({ id: 1, method: "initialize", params: { protocolVersion: "2025-06-18" } });
+  send({ id: 2, method: "initialize", params: { protocolVersion: "2025-11-25" } });
+  send({ id: 3, method: "initialize", params: { protocolVersion: "2099-01-01" } });
+  send({ id: 4, method: "initialize", params: {} });
+  await new Promise((r) => setTimeout(r, 500));
+  p.kill();
+  const res = Object.fromEntries(out.map((l) => JSON.parse(l)).map((m) => [m.id, m.result.protocolVersion]));
+  assert.deepEqual(res, { 1: "2025-06-18", 2: "2025-11-25", 3: "2025-11-25", 4: "2025-11-25" });
 });
