@@ -52,6 +52,10 @@ claude mcp add publish-gate -- node "$PWD/agent-ops-kit-lite/mcp/publish-gate/se
 Any MCP client works the same way (command `node`, argument the path to `server.js`).
 Details: [mcp/publish-gate/README.md](mcp/publish-gate/README.md).
 
+Also listed in the official MCP registry as `io.github.skibuff22/publish-gate` (version 0.1.0),
+packaged as an MCP Bundle attached to the [mcp-v0.1.0 release](https://github.com/skibuff22/agent-ops-kit-lite/releases/tag/mcp-v0.1.0).
+The bundle has not been tested in an MCPB client yet; the clone install above is the tested path.
+
 ## Quick start (manual copy)
 
 1. Copy `CLAUDE.md` and `directives/` into your repo root.
