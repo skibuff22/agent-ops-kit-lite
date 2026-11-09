@@ -1,28 +1,51 @@
-# Publishes mcp/publish-gate to npm and the official MCP registry on tag mcp-v*.
-# Needs repo secret NPM_TOKEN; the registry uses GitHub OIDC (no secret).
+# Publishes mcp/publish-gate to the official MCP registry on tag mcp-v* (or by hand).
+# server.json lists the MCPB bundle attached to the GitHub release of that tag; the job
+# checks the release asset's sha256 against server.json before publishing.
+# The registry login uses GitHub OIDC (no secret). npm runs only if the NPM_TOKEN secret
+# exists; add the npm package to server.json (new version) once it is on npm.
 name: publish-mcp
 on:
   push:
     tags: ["mcp-v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "release tag, e.g. mcp-v0.1.0"
+        required: true
 permissions:
   id-token: write
   contents: read
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
     defaults:
       run:
         working-directory: mcp/publish-gate
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
       - run: npm test
-      - run: npm publish --access public
+      - name: Release asset matches server.json
+        run: |
+          gh release download "$TAG" -R "$GITHUB_REPOSITORY" -p publish-gate.mcpb -D /tmp/rel
+          want=$(node -e 'const s=require("./server.json");const p=s.packages.find(p=>p.registryType==="mcpb");console.log(p?p.fileSha256:"")')
+          got=$(sha256sum /tmp/rel/publish-gate.mcpb | cut -d" " -f1)
+          echo "server.json $want / asset $got"
+          test -n "$want" && test "$want" = "$got"
+      - name: npm publish (only with NPM_TOKEN)
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then echo "no NPM_TOKEN, skipping npm"; exit 0; fi
+          npm publish --access public
       - name: Install mcp-publisher
         run: curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
       - run: ./mcp-publisher login github-oidc

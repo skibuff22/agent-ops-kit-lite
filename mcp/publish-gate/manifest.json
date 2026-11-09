@@ -1,0 +1,50 @@
+{
+  "manifest_version": "0.2",
+  "name": "publish-gate",
+  "display_name": "Publish Gate (lite)",
+  "version": "0.1.0",
+  "description": "Check a draft's numbers against your facts.md and its links before you publish.",
+  "long_description": "Two checks to run on a draft before it goes out. check_numbers fails each number that is not in your facts file and has no [src: URL] on the same line; years, times, version strings and list numbering are exempt. check_links fetches each URL and fails any that errors or returns HTTP 400 or higher, and any URL containing 'checkout' without utm_source. Zero dependencies.",
+  "author": {
+    "name": "Calyx AI (Quality Tester Solutions LLC)",
+    "url": "https://calyx-ai.net/"
+  },
+  "homepage": "https://github.com/skibuff22/agent-ops-kit-lite/tree/master/mcp/publish-gate",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skibuff22/agent-ops-kit-lite"
+  },
+  "server": {
+    "type": "node",
+    "entry_point": "server.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/server.js"
+      ],
+      "env": {}
+    }
+  },
+  "tools": [
+    {
+      "name": "check_numbers",
+      "description": "Fail each number in a draft that is not in the facts file and has no [src: URL] on its line (years, times, versions and list numbering exempt)."
+    },
+    {
+      "name": "check_links",
+      "description": "Fail any URL in a draft that errors or returns HTTP 400 or higher, and any URL containing 'checkout' without utm_source."
+    }
+  ],
+  "keywords": [
+    "fact-check",
+    "publishing",
+    "links",
+    "claude-code"
+  ],
+  "license": "MIT",
+  "compatibility": {
+    "runtimes": {
+      "node": ">=18"
+    }
+  }
+}

@@ -1,10 +1,22 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.skibuff22/publish-gate",
+  "title": "Publish Gate (lite)",
   "description": "Check a draft's numbers against your facts.md and its links before you publish.",
-  "repository": { "url": "https://github.com/skibuff22/agent-ops-kit-lite", "source": "github", "subfolder": "mcp/publish-gate" },
+  "repository": {
+    "url": "https://github.com/skibuff22/agent-ops-kit-lite",
+    "source": "github",
+    "subfolder": "mcp/publish-gate"
+  },
   "version": "0.1.0",
   "packages": [
-    { "registryType": "npm", "identifier": "publish-gate-mcp", "version": "0.1.0", "transport": { "type": "stdio" } }
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/skibuff22/agent-ops-kit-lite/releases/download/mcp-v0.1.0/publish-gate.mcpb",
+      "fileSha256": "1b032ae3ce70dc974726da444fe0e448ae8bdfa39a92d53bd1001c9f51ff4aca",
+      "transport": {
+        "type": "stdio"
+      }
+    }
   ]
 }
