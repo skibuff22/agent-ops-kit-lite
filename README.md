@@ -11,15 +11,18 @@ failure becomes a test, a rule, and a lint.
 
 ## What's in the lite version (free, MIT)
 
+The plugin lives in [`plugins/agent-ops-kit-lite/`](plugins/agent-ops-kit-lite/); the MCP server in `mcp/` is separate.
+
+
 | File | What it is |
 |---|---|
-| `CLAUDE.md` | The agent's operating instructions: the 3 layers, 6 operating principles, the self-annealing loop, mandatory directive checks. Cursor: paste into `.cursorrules`; Codex/Gemini: `AGENTS.md` / `GEMINI.md`. |
-| `directives/core/operating-principles.md` | The non-negotiables, written to sync unchanged into every repo you run |
-| `directives/00_template.md` | The directive layout (Goal · Inputs · Execution tools · Outputs · Edge cases · Verification) |
-| `executions/lint_secrets.py` | Catches hard-coded API keys/tokens before they reach git (Stripe, GitHub, AWS, Slack, OpenAI, Anthropic, private keys). Zero dependencies. |
+| `plugins/agent-ops-kit-lite/templates/CLAUDE.md` | The agent's operating instructions: the 3 layers, 6 operating principles, the self-annealing loop, mandatory directive checks. Cursor: paste into `.cursorrules`; Codex/Gemini: `AGENTS.md` / `GEMINI.md`. |
+| `plugins/agent-ops-kit-lite/templates/directives/core/operating-principles.md` | The non-negotiables, written to sync unchanged into every repo you run |
+| `plugins/agent-ops-kit-lite/templates/directives/00_template.md` | The directive layout (Goal · Inputs · Execution tools · Outputs · Edge cases · Verification) |
+| `plugins/agent-ops-kit-lite/templates/executions/lint_secrets.py` | Catches hard-coded API keys/tokens before they reach git (Stripe, GitHub, AWS, Slack, OpenAI, Anthropic, private keys). Zero dependencies. |
 
 ```
-python executions/lint_secrets.py          # exit 1 on any finding
+python plugins/agent-ops-kit-lite/templates/executions/lint_secrets.py --root .   # exit 1 on any finding
 ```
 
 ## Install as a Claude Code plugin
@@ -58,13 +61,13 @@ The bundle has not been tested in an MCPB client yet; the clone install above is
 
 ## Quick start (manual copy)
 
-1. Copy `CLAUDE.md` and `directives/` into your repo root.
-2. Write your first directive from `directives/00_template.md`, named after the job
+1. Copy `plugins/agent-ops-kit-lite/templates/CLAUDE.md` and `plugins/agent-ops-kit-lite/templates/directives/` into your repo root.
+2. Write your first directive from `plugins/agent-ops-kit-lite/templates/directives/00_template.md`, named after the job
    (`deploy_api.md`). Reference the script that will do the work.
 3. Tell the agent: *"Read CLAUDE.md, then <job>."* Watch what it appends to the
    directive's *Edge cases & learnings* — that section is the return on investment.
 
-## The full kit ($19 launch price through 2026-11-02, then $29)
+## The full kit
 
 The paid **Agent Ops Kit** adds everything CLAUDE.md's mandatory-checks table refers to:
 

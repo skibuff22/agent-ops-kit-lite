@@ -10,9 +10,9 @@
   "plugins": [
     {
       "name": "agent-ops-kit-lite",
-      "source": "./",
+      "source": "./plugins/agent-ops-kit-lite",
       "description": "D.O.E. framework for Claude Code: /aok-init scaffolds CLAUDE.md, directives and a secrets linter; /aok-directive writes a new directive; /verify-claims checks a draft against your facts.md before you publish.",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "category": "productivity"
     }
   ]
